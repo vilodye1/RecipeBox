@@ -1,0 +1,55 @@
+<script type="text/javascript" charset="utf-8" src="header.js"></script>
+        <!-- Ingredients list -->
+        <script type="text/javascript">
+            const newIngredient = document.querySelector('.ingredient');
+            const submitNewIngredient = document.querySelector('.add-ing-btn');
+            const ingredientList = document.querySelector('#ingredients-list');
+            const storeList = document.querySelector('.list');
+            const deleteBtn = document.getElementsByTagName('span');
+
+
+
+            // Converts ingredients array to use in Javascript
+            let ingredientArray = <?php echo json_encode($recipeIng) ?>;
+
+            // Displays current ingredients array in DOM
+             let newArray = ingredientArray.map(ing => `<li class="ing-item">${ing}<span class="delete-ing"> X</span></li>`).join('');
+             ingredientList.innerHTML = newArray;
+            
+            //  updates ingredients list when new items are added or removed
+             const updateArray = () => {
+                  let newArray = ingredientArray.map(ing => `<li class="ing-item">${ing}<span class="delete-ing"> X</span></li>`).join('');
+                  ingredientList.innerHTML = newArray;
+                  storeList.value = JSON.stringify(ingredientArray);
+                }
+    
+
+            // Function that adds new ingredients to ingredients List
+            const addIngredients = (e) => {
+                e.preventDefault();
+                ingredientArray.push(newIngredient.value.trim());
+                updateArray();
+            }
+
+            // converts Javascript array to JSON to be used in PHP
+            const convertedArray = JSON.stringify(ingredientArray);
+            storeList.value = convertedArray;
+
+            // Event Listeners
+            submitNewIngredient.addEventListener('click', addIngredients);
+
+            // Removes Ingredients from List
+            Array.from(deleteBtn).forEach((btn) => {
+              btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                btn.parentElement.remove();
+                newArray = ingredientList.innerText;
+                console.log(newArray);
+                // let result = newArray.replace(/(\nX)/g, ',');
+                // result = result.split(',');
+                // result = result.replace(/,\s*$/, '').split(',');
+                // storeList.value = JSON.stringify(result);
+                // console.log(JSON.stringify(result));
+                });
+              });
+          </script>
